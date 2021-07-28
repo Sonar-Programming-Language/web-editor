@@ -12,12 +12,12 @@ export const LightTheme: ITheme = {
 }
 
 export const DarkTheme: ITheme = {
-    depression1: '#777',
+    depression1: '#666',
     depression2: '#888',
     depressionDeep: '#999',
-    elevation1: '#444',
-    elevation2: '#444',
-    border1: '#ddd',
+    elevation1: '#1f2933',
+    elevation2: '#323f48',
+    border1: '#1f2933',
     iconSize1: 12,
     fontColor1: '#fff',
 }

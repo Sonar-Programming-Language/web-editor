@@ -10,7 +10,7 @@ const Navbar = (props: Props) => {
     const context = React.useContext(AppContext);
 
     return (
-        <div className={`flex flex-row justify-between py-1 px-4`} style={{ background: context.theme.elevation1, borderBottom: `2px solid ${context.theme.border1}` }}>
+        <div className={`flex flex-row justify-between sm:py-2 sm:px-4 xxs:py-2 xxs:px-3`} style={{ background: context.theme.elevation1, borderBottom: `2px solid ${context.theme.border1}` }}>
             <div>
                 <span style={{ fontFamily: 'monospace', fontSize: 16, color: context.theme.fontColor1, fontWeight: `bold` }}>
                     sonar-lang
@@ -21,15 +21,11 @@ const Navbar = (props: Props) => {
                     firstChild={
                         <FaSun
                             size={14}
-                        // onMouseOver={e => e.currentTarget.style.color = 'blue'}
-                        // onMouseOut={e => e.currentTarget.style.color = 'inherit'}
                         />
                     }
                     secondChild={
                         <FaMoon
                             size={14}
-                        // onMouseOver={e => e.currentTarget.style.color = '#666'}
-                        // onMouseOut={e => e.currentTarget.style.color = 'inherit'}
                         />
                     }
                     selected={1}

@@ -1,8 +1,7 @@
-import dynamic from 'next/dynamic';
 import Head from 'next/head';
-import styles from '../styles/Home.module.css';
 import Workspace from 'components/organisms/Workspace';
 import Navbar from 'components/atoms/Navbar';
+import FloatingActionButton from 'components/atoms/FloatingActionButton';
 
 export default function Home() {
   return (
@@ -16,6 +15,7 @@ export default function Home() {
       <div className={`h-screen flex flex-col`}>
         <Navbar />
         <Workspace />
+        <FloatingActionButton />
       </div>
     </div>
   );

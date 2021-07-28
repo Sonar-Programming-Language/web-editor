@@ -1,8 +1,8 @@
 import React, { Component, createContext } from 'react';
-import { IState, selectedTheme } from './interfaces';
+import { availableTabs, IState, selectedTheme } from './interfaces';
 import { DarkTheme, LightTheme } from './theme';
 import Sonar from 'sonar-core-npm-package/Program';
-import { Null } from 'sonar-core-npm-package/object';
+import { Null, Err } from 'sonar-core-npm-package/object';
 
 export const AppContext = createContext(null);
 
@@ -58,17 +58,29 @@ class AppContextProvider extends Component {
             console: {
                 ast: '',
                 result: '',
+                view: [<></>]
             },
             selectedTheme: 'light',
             theme: LightTheme,
+            workspace: {
+                currentTab: 'editor',
+            },
             // methods
             updateContext: cx => this.setState({ ...cx }),
             executeProgram: () => this.executeProgram(),
             updateEditor: (input: string) => this.updateEditor(input),
             clearConsoleOutput: () => this.clearConsoleOutput(),
-            switchTheme: (selectedTheme: selectedTheme) => this.switchTheme(selectedTheme)
+            switchTheme: (selectedTheme: selectedTheme) => this.switchTheme(selectedTheme),
+            switchTab: (tab: availableTabs) => this.switchTab(tab)
         };
         this.state = { ...state };
+    }
+
+    switchTab(tab: availableTabs): void {
+        const state = { ...this.state } as unknown as IState;
+        state.workspace.currentTab = tab;
+
+        this.setState({ ...state });
     }
 
     switchTheme(selectedTheme: selectedTheme): void {
@@ -76,9 +88,11 @@ class AppContextProvider extends Component {
         switch (selectedTheme) {
             case 'light':
                 state.theme = DarkTheme;
+                state.selectedTheme = 'dark';
                 break;
             case 'dark':
                 state.theme = LightTheme;
+                state.selectedTheme = 'light';
             default:
                 break;
         }
@@ -92,19 +106,22 @@ class AppContextProvider extends Component {
         const program = new Sonar(state.editor.textContent);
 
         let results = program.result;
+        let logType = results instanceof Err ? 'err' : 'log';
+
         results = results instanceof Null || !!results == false ? '' : results.inspect().concat('\n');
         results = results.concat(program.logs.join('\n'));
 
-        // to remove the trailing newline
-        if (results[results.length - 1] == '\n') results = results.slice(0);
+        results = results.replace(/\s|\n/, '');
+        state.console.result += '\n' + results;
 
-        state.console.result = state.console.result.concat('\n');
-        results = state.console.result.concat(results);
-        // state.console.result = state.console.result.concat('\n\n').concat(results);
-        state.console.result = results;
-        state.console.ast = program.ast;
+        state.console.view.push(
+            <div style={{
+                color: logType == 'err' ? 'red' : state.theme.fontColor1,
+            }}>
+                {results}
+            </div>
+        );
 
-        // console.log("Result :>> ", results);
         this.setState({ ...state });
     }
 
